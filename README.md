@@ -154,5 +154,4 @@ This approach is ideal for:
 
 ✨ **Least privilege is not restrictive — it’s protective.**
 This demo shows how to do it *right*, not just *fast*.
-Just tell me 👍
-```
+
