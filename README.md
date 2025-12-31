@@ -317,6 +317,4 @@ Este enfoque es ideal para:
 ✨ **El mínimo privilegio no restringe — protege.**
 Este demo muestra cómo hacerlo **bien**, no solo rápido.
 
-```
-
 ---
