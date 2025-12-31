@@ -1,3 +1,5 @@
+# Version en 🇪🇸 - ⬇️
+
 # 🔐 IAM Least Privilege Demo  
 ### Terraform + AWS Lambda + Amazon S3
 
@@ -155,3 +157,166 @@ This approach is ideal for:
 ✨ **Least privilege is not restrictive — it’s protective.**
 This demo shows how to do it *right*, not just *fast*.
 
+---
+# 🇪🇸
+# 🔐 Demostración de IAM Least Privilege  
+### Terraform + AWS Lambda + Amazon S3
+
+Este repositorio demuestra **IAM Least Privilege en la práctica** utilizando una **arquitectura AWS mínima y real**.
+
+En lugar de teoría, este proyecto muestra cómo:
+- Otorgar **solo los permisos estrictamente necesarios**
+- Limitar el acceso a **prefijos específicos de S3**
+- Evitar errores comunes de sobre-permisos en IAM
+- Validar el comportamiento mediante la ejecución real de una función Lambda
+
+---
+
+## 🧭 ¿Por qué existe este proyecto?
+
+Las políticas de IAM suelen volverse demasiado amplias porque:
+- Son difíciles de razonar
+- Se copian de ejemplos genéricos
+- Se escriben “solo para que funcione”
+
+Este demo prueba que:
+> **El principio de mínimo privilegio es alcanzable, entendible y práctico**  
+— incluso para cargas de trabajo serverless comunes.
+
+---
+
+## 🧱 ¿Qué se despliega?
+
+Este proyecto despliega **únicamente lo necesario**:
+
+- 🪣 **Un bucket de Amazon S3**
+- ⚡ **Una función AWS Lambda**
+- 🔐 **Un rol IAM con permisos estrictamente limitados**
+- 📜 **CloudWatch Logs** para observabilidad
+
+Sin VPCs.  
+Sin servicios adicionales.  
+Sin permisos ocultos.
+
+---
+
+## 🔍 Modelo de Permisos de la Lambda
+
+La función Lambda se ejecuta con un **rol IAM muy específico**.
+
+### ✅ Acciones Permitidas
+
+| Servicio | Permiso | Alcance |
+|--------|----------|---------|
+| S3 | Lectura | `s3://<bucket>/public/*` |
+| S3 | Escritura | `s3://<bucket>/results/*` |
+| CloudWatch | Escritura de logs | Solo su log group |
+
+### 🚫 Acciones NO Permitidas
+
+- ❌ Listar todos los buckets de S3
+- ❌ Leer o escribir fuera de los prefijos permitidos
+- ❌ Acceder a otros servicios de AWS
+- ❌ Asumir roles adicionales
+
+> Si la Lambda intenta hacer algo fuera de sus permisos,  
+> **AWS rechazará la acción automáticamente**, como debe ser.
+
+---
+
+## 🧠 Principios de Least Privilege Demostrados
+
+- **Acceso a nivel de prefijo**, no a todo el bucket
+- **Rol IAM con un solo propósito**
+- **Sin acciones comodín (`*`)**
+- **Sin recursos comodín innecesarios**
+- **Permisos alineados con el comportamiento real en ejecución**
+
+---
+
+## 🚀 Desplegar el Demo
+
+### Requisitos Previos
+
+- AWS CLI configurado (`aws configure`)
+- Terraform instalado (se recomienda v1.x)
+
+---
+
+### Pasos de Despliegue
+
+```bash
+cd terraform
+terraform init
+terraform apply
+````
+
+Terraform se encargará de:
+
+1. Crear el bucket S3
+2. Crear el rol y la política IAM
+3. Desplegar la función Lambda
+4. Configurar permisos de logging
+
+---
+
+## 🧪 ¿Cómo Validar el Mínimo Privilegio?
+
+Después del despliegue puedes:
+
+* Invocar la Lambda y confirmar que:
+
+  * La lectura desde `public/` funciona
+  * La escritura en `results/` funciona
+* Modificar el código de la Lambda para:
+
+  * Acceder a un prefijo no permitido
+  * Llamar a un servicio de AWS no autorizado
+
+👉 Verás errores **AccessDenied** en CloudWatch Logs.
+
+Este comportamiento es **esperado y correcto**.
+
+---
+
+## ⚠️ Anti-Patrones que Este Proyecto Evita
+
+* ❌ `AmazonS3FullAccess`
+* ❌ `Resource: "*"`
+* ❌ Roles IAM compartidos
+* ❌ Permisos agregados “por si acaso”
+* ❌ Cambios manuales en IAM fuera de Terraform
+
+---
+
+## 🧩 ¿Cuándo Usar Este Patrón?
+
+Este enfoque es ideal para:
+
+* Aplicaciones serverless
+* Lambdas de procesamiento de datos
+* Revisiones de seguridad y auditorías
+* Capacitación y onboarding en IAM
+* Pruebas de concepto
+
+---
+
+## 📚 Recursos Adicionales
+
+* Buenas Prácticas de IAM
+  [https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
+
+* Permisos en AWS Lambda
+  [https://docs.aws.amazon.com/lambda/latest/dg/lambda-permissions.html](https://docs.aws.amazon.com/lambda/latest/dg/lambda-permissions.html)
+
+* IAM en Terraform (AWS Provider)
+  [https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)
+
+---
+
+✨ **El mínimo privilegio no restringe — protege.**
+Este demo muestra cómo hacerlo **bien**, no solo rápido.
+
+```
+
+---
